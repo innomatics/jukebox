@@ -1,4 +1,16 @@
 var songList = [];
+var songFolder = '';
+
+function drawPlayButton(parentElement, filename, artist, title, cover)
+{
+  var sound = document.createElement('audio');
+  sound.id = 'audio-player';
+  sound.controls = 'controls';
+  sound.src = 'file://' + songFolder + filename;
+  sound.type = 'audio/mpeg';
+  parentElement.appendChild(sound);
+
+}
 
 function printSongList()
 {
@@ -9,9 +21,16 @@ function printSongList()
   }
   else
   {
+    var buttons = document.getElementById('buttons');
     var result = '';
     for (var i = 0; i < songList.length; i++)
     {
+      drawPlayButton(buttons,
+        songList[i].filename,
+        songList[i].artist,
+        songList[i].title,
+        songList[i].cover);
+
       result += songList[i].title + ' by ' + songList[i].artist + '<BR>'
     }
     document.getElementById('songList').innerHTML = result;
@@ -33,6 +52,7 @@ function AddListeners()
 
 function appStart()
 {
+  songFolder = localStorage.getItem('songFolder');
   AddListeners();
   drawUI();
 }

@@ -12,9 +12,10 @@ function printSongList()
   document.getElementById('songList').innerHTML = result;
 }
 
-function addSong(artist, title, cover)
+function addSong(filename, artist, title, cover)
 {
   var newSong = {};
+  newSong.filename = filename;
   newSong.artist = artist;
   newSong.title = title;
   newSong.cover = cover;
@@ -48,7 +49,7 @@ function addFile(file)
         {
           cover = tag.tags.picture;
         }
-        addSong(artist, title, cover);
+        addSong(file.name, artist, title, cover);
       },
       onError: function (error)
       {
@@ -80,6 +81,7 @@ function addFiles(e)
 function setFolder(e)
 {
   songFolder = e.target.value;
+  localStorage.setItem('songFolder', songFolder);
 }
 
 function AddListeners()
@@ -91,7 +93,12 @@ function AddListeners()
 function appStart()
 {
   AddListeners();
-  songFolder = document.getElementById('songFolder').value;
+  songFolder = localStorage.getItem('songFolder');
+  if (songFolder == null)
+  {
+    songFolder = document.getElementById('songFolder').value;
+    localStorage.setItem('songFolder', songFolder);
+  }
   songList = JSON.parse(localStorage.getItem('songList'));
   if (!songList)
   {
