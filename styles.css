@@ -1,0 +1,47 @@
+.mainCanvas
+{
+  background-color: black;
+}
+
+.playButton
+{
+  color: gray;
+	max-width: 30vw;
+	min-width: 30vw;
+	min-height: 30vw;
+	display: inline-table;
+	border-color: silver;
+	border-width: 2pt;
+	border-style: solid;
+	border-radius: 15vh;
+	text-align: center;
+	margin: 5px 5px 5px 5px;
+	font-family: 'Helvetica Neue', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 10px 10px 10px 10px;
+}
+
+.playButton span
+{
+  vertical-align:middle;
+  display: table-cell;
+}
+
+.nowPlaying
+{
+  color: white;
+	border-width: 10pt;
+  -webkit-animation: spin-360 10s linear;
+  animation: spin-360 10s linear;
+  -webkit-animation-iteration-count: 1000;
+  animation-iteration-count: 1000;
+}
+
+@-webkit-keyframes spin-360
+{
+	100% {
+    transform: rotate(360deg);
+	}
+}
