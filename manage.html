@@ -9,16 +9,23 @@
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <p>Song Folder: <input
+  <h1>Jukebox Management</h1>
+  <a href="play.html">Take me to the player!</a>
+  <h2>Song Folder</h1>
+  <input
     type="text"
     id="songFolder"
     value="/home/justin/jukebox-songs/"
-    /></p>
-  <p>Load Files: <input
+    />
+  <p>The Song Folder is where your songs are e.g. on Windows <i>C:\Users\Brian\Music\</i> or on Mac/Linux <i>/home/brian/music</i></p>
+  <BR><BR>
+  <h2>Load Songs</h2>
+  <p><input
     type="file"
     id="addFiles"
     multiple
     /></p>
+  <p><b>Loaded songs:</b></p>
   <p><label id=songList> </label></p>
 </body>
 </html>

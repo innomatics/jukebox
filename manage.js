@@ -110,8 +110,4 @@ function appStart()
 (function ()
 {
   window.onload = appStart;
-  window.onbeforeunload = function ()
-  {
-    return "Are you sure?";
-  };
 })();

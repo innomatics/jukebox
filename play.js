@@ -52,16 +52,17 @@ function songclick(e)
 
 function drawPlayButton(id, parentElement, filename, artist, title, cover)
 {
+  // hidden audio elements
   var sound = document.createElement('audio');
   sound.id = 'audio' + id;
-  //sound.controls = 'controls';
   sound.src = 'file://' + songFolder + filename;
   sound.type = 'audio/mpeg';
   parentElement.appendChild(sound);
 
+  // our actual buttons
   var btn = document.createElement('div');
   btn.id = 'button' + id;
-  btn.innerHTML = '<span>' + artist + '<BR>' + title + '</span>';
+  btn.innerHTML = '<span>' + artist + '<BR><BR>' + title + '</span>';
   btn.addEventListener('click', function (e)
   {
     songclick(e);
@@ -95,10 +96,7 @@ function printSongList()
 
 function drawUI()
 {
-  // Read JSON from local storage
   printSongList();
-
-  // Build audio html5 elements
 }
 
 function AddListeners()

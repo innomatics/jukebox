@@ -1,6 +1,33 @@
+h1 { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase; }
+
+
+h2 { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 30px; font-weight: 800; line-height: 36px; margin: 0 0 24px; text-align: center; }
+
+
+p { color: #f8f8f8; font-family: 'Raleway',sans-serif; font-size: 18px; font-weight: 500; line-height: 32px; margin: 0 0 24px; }
+
+
+a { color: #c8c8c8; text-decoration: underline; }
+
+
+a:hover { color: #1c1c1c; text-decoration: underline; }
+
+
+
+body {
+    background-color: #ff69b4;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
 .mainCanvas
 {
   background-color: black;
+  min-height: 100%;
+  height: auto;
+  height: 100%;
+  margin: 0 0 0 0;
 }
 
 .playButton
@@ -10,10 +37,10 @@
 	min-width: 30vw;
 	min-height: 30vw;
 	display: inline-table;
-	border-color: silver;
-	border-width: 2pt;
+	border-color: dark-gray;
+	border-width: 0.2vw;
 	border-style: solid;
-	border-radius: 15vh;
+	border-radius: 15.2vw;
 	text-align: center;
 	margin: 5px 5px 5px 5px;
 	font-family: 'Helvetica Neue', sans-serif;
@@ -32,7 +59,9 @@
 .nowPlaying
 {
   color: white;
-	border-width: 10pt;
+	border-color: silver;
+	border-width: 1vw;
+	border-radius: 17vw;
   -webkit-animation: spin-360 10s linear;
   animation: spin-360 10s linear;
   -webkit-animation-iteration-count: 1000;
