@@ -32,7 +32,6 @@ html, body {
 
 .playButton
 {
-  color: gray;
 	max-width: 30vw;
 	min-width: 30vw;
 	min-height: 30vw;
@@ -58,7 +57,6 @@ html, body {
 
 .nowPlaying
 {
-  color: white;
 	border-color: silver;
 	border-width: 1vw;
 	border-radius: 17vw;

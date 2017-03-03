@@ -22,7 +22,7 @@ function getRandomColor(title)
   var bigint = title.hashCode();
   var hex = bigint.toString(16);
   var smallhex = parseInt(hex, 16) % parseInt('0xffffff', 16);
-  return '#' + smallhex.toString(16);
+  return smallhex.toString(16);
 }
 
 function songclick(e)
@@ -68,7 +68,10 @@ function drawPlayButton(id, parentElement, filename, artist, title, cover)
     songclick(e);
   }, false);
   btn.classList.add('playButton');
-  btn.style.backgroundColor = getRandomColor(title);
+  var c = getRandomColor(title);
+  btn.style.backgroundColor = '#' + c;
+  t = 0xffffff ^ parseInt(c, 16);
+  btn.style.color = '#' + t.toString(16);
   parentElement.appendChild(btn);
 }
 
