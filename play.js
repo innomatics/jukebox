@@ -1,5 +1,5 @@
-var songList = [];
-var songFolder = '';
+//var songList = [];
+//var songFolder = '';
 var two32 = 4294967295; // 2^32
 var nowPlaying = '';
 
@@ -50,40 +50,49 @@ function songclick(e)
   }
 }
 
-function drawPlayButton(id, parentElement, filename, artist, title, cover)
+function drawPlayButton(id, parentElement, filename, artist, title, cover, file)
 {
-  // hidden audio elements
-  var sound = document.createElement('audio');
-  sound.id = 'audio' + id;
-  sound.src = 'file://' + songFolder + filename;
-  sound.type = 'audio/mpeg';
-  parentElement.appendChild(sound);
-
-  // our actual buttons
-  var btn = document.createElement('div');
-  btn.id = 'button' + id;
-  btn.innerHTML = '<span>' + artist + '<BR><BR>' + title + '</span>';
-  btn.addEventListener('click', function (e)
+  var reader = new FileReader();
+  reader.addEventListener('load', function ()
   {
-    songclick(e);
+
+    // hidden audio elements
+    var sound = document.createElement('audio');
+    sound.id = 'audio' + id;
+    // sound.src = 'file://' + songFolder + filename;
+    sound.src = reader.result;
+    sound.type = 'audio/mpeg';
+    parentElement.appendChild(sound);
+
+    // our actual buttons
+    var btn = document.createElement('div');
+    btn.id = 'button' + id;
+    btn.innerHTML = '<span>' + artist + '<BR><BR>' + title + '</span>';
+    btn.addEventListener('click', function (e)
+    {
+      songclick(e);
+    }, false);
+    btn.classList.add('playButton');
+    var c = getRandomColor(title);
+    btn.style.backgroundColor = '#' + c;
+    t = 0xffffff ^ parseInt(c, 16);
+    btn.style.color = '#' + t.toString(16);
+    parentElement.appendChild(btn);
   }, false);
-  btn.classList.add('playButton');
-  var c = getRandomColor(title);
-  btn.style.backgroundColor = '#' + c;
-  t = 0xffffff ^ parseInt(c, 16);
-  btn.style.color = '#' + t.toString(16);
-  parentElement.appendChild(btn);
+  reader.readAsDataURL(file);
 }
 
 function printSongList()
 {
-  songList = JSON.parse(localStorage.getItem('songList'));
-  if (!songList)
+  //songList = JSON.parse(localStorage.getItem('songList'));
+  if (songList.count == 0)
   {
     alert('No songs loaded!!');
   }
   else
   {
+    var manageDiv = document.getElementById('manageDiv');
+    manageDiv.classList.add('hiddenDiv');
     var buttons = document.getElementById('buttons');
     var result = '';
     for (var i = 0; i < songList.length; i++)
@@ -92,21 +101,13 @@ function printSongList()
         songList[i].filename,
         songList[i].artist,
         songList[i].title,
-        songList[i].cover);
+        songList[i].cover,
+        songList[i].file);
     }
   }
 }
 
-function drawUI()
-{
-  printSongList();
-}
-
-function AddListeners()
-{
-  //document.getElementById('addFiles').addEventListener('change', addFiles, false);
-}
-
+/*
 function appStart()
 {
   songFolder = localStorage.getItem('songFolder');
@@ -122,3 +123,4 @@ function appStart()
     return "Are you sure?";
   };
 })();
+*/

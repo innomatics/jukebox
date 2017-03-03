@@ -1,34 +1,29 @@
 var songList = [];
+var songCount = 0;
 var songFolder = '';
 var jsmediatags = window.jsmediatags;
 
-function printSongList()
-{
-  var result = '';
-  for (var i = 0; i < songList.length; i++)
-  {
-    result += songList[i].title + ' by ' + songList[i].artist + '<BR>'
-  }
-  document.getElementById('songList').innerHTML = result;
-}
-
-function addSong(filename, artist, title, cover)
+function addSong(file, artist, title, cover, i)
 {
   var newSong = {};
-  newSong.filename = filename;
+  newSong.filename = file.name;
   newSong.artist = artist;
   newSong.title = title;
   newSong.cover = cover;
+  newSong.file = file;
+
   songList.push(newSong);
-  printSongList();
-  localStorage.setItem('songList', JSON.stringify(songList));
+
+  if (i == (songCount - 1))
+  {
+    printSongList();
+  }
 }
 
-function addFile(file)
+function addFile(file, i)
 {
   if (file)
   {
-
     jsmediatags.read(file,
     {
       onSuccess: function (tag)
@@ -49,65 +44,42 @@ function addFile(file)
         {
           cover = tag.tags.picture;
         }
-        addSong(file.name, artist, title, cover);
+        addSong(file, artist, title, cover, i);
       },
       onError: function (error)
       {
         console.log(error);
       }
     });
-
-    // Add file to local JSON
   }
 }
 
 function addFiles(e)
 {
-  if (songFolder.length == 0)
+  songList = [];
+  var files = e.target.files;
+  songCount = files.length;
+  for (var i = 0; i < songCount; i++)
   {
-    alert('Make sure to set the song folder first.');
+    addFile(files[i], i);
   }
-  else
-  {
-    songList = [];
-    var files = e.target.files;
-    for (var i = 0; i < files.length; i++)
-    {
-      addFile(files[i]);
-    }
-  }
-}
-
-function setFolder(e)
-{
-  songFolder = e.target.value;
-  localStorage.setItem('songFolder', songFolder);
 }
 
 function AddListeners()
 {
   document.getElementById('addFiles').addEventListener('change', addFiles, false);
-  document.getElementById('songFolder').addEventListener('change', setFolder, false);
 }
 
 function appStart()
 {
   AddListeners();
-  songFolder = localStorage.getItem('songFolder');
-  if (songFolder == null)
-  {
-    songFolder = document.getElementById('songFolder').value;
-    localStorage.setItem('songFolder', songFolder);
-  }
-  songList = JSON.parse(localStorage.getItem('songList'));
-  if (!songList)
-  {
-    songList = [];
-  }
-  printSongList();
 }
 
 (function ()
 {
   window.onload = appStart;
+  window.onbeforeunload = function ()
+  {
+    return "Are you sure?";
+  };
 })();

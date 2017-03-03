@@ -3,12 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
-<title>Jukebox</title>
+<title>Manage Jukebox</title>
+<script type="text/javascript" src="jsmediatags.min.js"></script>
 <script type="text/javascript" src="play.js"></script>
+<script type="text/javascript" src="manage.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div id="buttons" class="mainCanvas"/>
+  <div id="manageDiv">
+  <h1>Junior Juke</h1>
+  <p><input
+    type="file"
+    id="addFiles"
+    multiple
+    /></p>
+  </div>
+    <div id="buttons" class="mainCanvas"/>
 </body>
-</script>
 </html>
