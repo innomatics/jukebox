@@ -19,6 +19,16 @@ input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font
   display: none;
 }
 
+.unHiddenDiv
+{
+  display: inline-block;
+}
+
+.tile
+{
+	display: inline-block;
+}
+
 .playButton
 {
 	max-width: 30vw;
@@ -32,7 +42,7 @@ input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font
 	text-align: center;
 	margin: 5px 5px 5px 5px;
 	font-family: 'Helvetica Neue', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   line-height: 1;
   padding: 10px 10px 10px 10px;
@@ -42,6 +52,24 @@ input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font
 {
   vertical-align:middle;
   display: table-cell;
+}
+
+.canChangeNow
+{
+  -webkit-animation: flash 10s linear;
+  animation: flash 1s linear;
+  -webkit-animation-iteration-count: 1000;
+  animation-iteration-count: 1000;
+}
+
+.timeLeft
+{
+  position: relative;
+  left: 14.5vw;
+  top: -5vw;
+  color: inherit;
+	font-family: 'Helvetica Neue', sans-serif;
+  font-size: 12px;
 }
 
 .nowPlaying
@@ -60,4 +88,13 @@ input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font
 	100% {
     transform: rotate(360deg);
 	}
+}
+
+@-webkit-keyframes flash {
+   0%, 50%, 100% {
+      opacity: 1;
+   }
+   25%, 75% {
+      opacity: 0;
+   }
 }

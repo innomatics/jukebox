@@ -16,7 +16,7 @@ function addSong(file, artist, title, cover, i)
 
   if (i == (songCount - 1))
   {
-    printSongList();
+    drawButtons();
   }
 }
 
