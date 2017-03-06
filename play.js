@@ -3,6 +3,7 @@
 var two32 = 4294967295; // 2^32
 var nowPlaying = '';
 var spinnerDiv;
+var buttonsDiv;
 var canChangeTime = 10;
 var canChangeNow = false;
 var lastUpdateTime = 0;
@@ -129,6 +130,8 @@ function drawPlayButton(id, parentElement, filename, artist, title, cover, file)
         {
           spinnerDiv.classList.remove('unHiddenDiv');
           spinnerDiv.classList.add('hiddenDiv');
+          buttonsDiv.classList.remove('hiddenDiv');
+          buttonsDiv.classList.add('unHiddenDiv');
         }
       }, false)
 
@@ -171,15 +174,14 @@ function drawButtons()
     var manageDiv = document.getElementById('manageDiv');
     manageDiv.classList.add('hiddenDiv');
     spinnerDiv = document.getElementById('spinnerDiv');
-    //spinnerDiv.style.visibility = 'visible';
     spinnerDiv.classList.remove('hiddenDiv');
     spinnerDiv.classList.add('unHiddenDiv');
 
-    var buttons = document.getElementById('buttons');
+    buttonsDiv = document.getElementById('buttons');
     var result = '';
     for (var i = 0; i < songList.length; i++)
     {
-      drawPlayButton(i, buttons,
+      drawPlayButton(i, buttonsDiv,
         songList[i].filename,
         songList[i].artist,
         songList[i].title,
