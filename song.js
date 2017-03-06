@@ -95,9 +95,10 @@ Song.prototype.play = function ()
   this.button.classList.add('nowPlaying');
   this.timeDisplay.classList.remove('canChangeNow');
   this.isFinishing = false;
-  if (nowPlaying == null)
+  this.isPlaying = true;
+  if (nowPlaying == -1)
   {
-    nowPlaying == this;
+    nowPlaying = this.id;
   }
 }
 
@@ -126,19 +127,21 @@ Song.prototype.drawButton = function (parent)
   var song = this;
   this.button.addEventListener('click', function (e)
   {
-    if (song.isPlaying)
+    if (this.isPlaying)
     {
       // You can't stop it once you start!
+      return;
     }
-    else if (nowPlaying === null)
+
+    if (nowPlaying == -1)
     {
       song.play();
     }
     else
     {
-      if (nowPlaying.isFinishing)
+      if (nextPlaying < 0 && songList[nowPlaying].isFinishing)
       {
-        nextPlaying = song;
+        nextPlaying = song.id;
         song.play();
       }
     }
@@ -191,7 +194,7 @@ Song.prototype.loadAudio = function (parent)
         {
           // Next song already started
           nowPlaying = nextPlaying;
-          nextPlaying = null;
+          nextPlaying = -1;
         }
         else
         {
@@ -205,6 +208,7 @@ Song.prototype.loadAudio = function (parent)
         }
 
         song.hide();
+        song.isPlaying = false;
 
         // unhide any songs that have rested long enough
         for (var i = 0; i < songList.length; i++)
