@@ -5,12 +5,14 @@
 <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
 <title>Manage Jukebox</title>
 <script type="text/javascript" src="jsmediatags.min.js"></script>
-<script type="text/javascript" src="play.js"></script>
-<script type="text/javascript" src="manage.js"></script>
+<script type="text/javascript" src="globals.js"></script>
+<script type="text/javascript" src="colors.js"></script>
+<script type="text/javascript" src="song.js"></script>
+<script type="text/javascript" src="juke.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div id="manageDiv">
+  <div id="manage">
   <h1>Junior Juke</h1>
   <p><input
     type="file"
@@ -18,9 +20,10 @@
     multiple
     accesskey="l"
     /></p>
-    <div id="fileList"></div>
+    <div id="startPlayer" class="startButton">Start Player!</div>
+    <div id="fileList" class="fileList"></div>
   </div>
-  <div id="buttons" class="mainCanvas" class="hiddenDiv"/>
-  <div id="spinnerDiv" class="hiddenDiv" ><img src="spinner.gif"/></div>
+  <div id="buttons" class="mainCanvas"/>
+  <div id="spinner" class="hiddenDiv" ><img src="spinner.gif"/></div>
 </body>
 </html>

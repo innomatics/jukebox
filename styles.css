@@ -4,7 +4,7 @@ html
 }
 
 h1 { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-transform: uppercase; }
-input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font-weight: 800; }
+input, .fileList, .startButton { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font-weight: 800; }
 
 .mainCanvas
 {
@@ -17,6 +17,15 @@ input { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font
 .hiddenDiv
 {
   display: none;
+}
+
+.startButton, input {
+    background-color: silver;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .unHiddenDiv
