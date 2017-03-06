@@ -95,6 +95,10 @@ Song.prototype.play = function ()
   this.button.classList.add('nowPlaying');
   this.timeDisplay.classList.remove('canChangeNow');
   this.isFinishing = false;
+  if (nowPlaying == null)
+  {
+    nowPlaying == this;
+  }
 }
 
 Song.prototype.drawButton = function (parent)
@@ -128,7 +132,6 @@ Song.prototype.drawButton = function (parent)
     }
     else if (nowPlaying === null)
     {
-      nowPlaying = this;
       song.play();
     }
     else
