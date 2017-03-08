@@ -104,7 +104,7 @@ Song.prototype.play = function ()
   nowPlaying = this;
   nextPlaying = null;
 
-  scrollToItemId('buttons', this.button.id);
+  scrollToItemId('buttons', this.timeDisplay.id);
 }
 
 Song.prototype.drawButton = function (parent)
