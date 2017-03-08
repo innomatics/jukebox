@@ -41,6 +41,7 @@ function Song(id, file, afterLoaded)
   this.button = {};
   this.timeDisplay = {};
   this.lastUpdateTime = 0;
+  this.totalTime = 0;
 
   this.title = file.name;
   this.artist = 'unknown';
@@ -76,30 +77,34 @@ function Song(id, file, afterLoaded)
 Song.prototype.hide = function ()
 {
   this.isHidden = true;
-  this.tile.classList.add('hiddenDiv');
   this.tile.classList.remove('tile');
   this.button.classList.remove('nowPlaying');
+  this.timeDisplay.classList.remove('isFinishing');
+  this.tile.classList.add('hiddenDiv');
+
+  this.lastUpdateTime = 0;
 };
 
 Song.prototype.unHide = function ()
 {
   this.isHidden = false;
-  this.restCount = 0;
   this.tile.classList.remove('hiddenDiv');
   this.tile.classList.add('tile');
+  this.restCount = 0;
+  this.updateTimeDisplay(this.totalTime);
 }
 
 Song.prototype.play = function ()
 {
   this.audio.play();
+  this.button.classList.remove('nextPlaying');
   this.button.classList.add('nowPlaying');
-  this.timeDisplay.classList.remove('canChangeNow');
   this.isFinishing = false;
   this.isPlaying = true;
-  if (nowPlaying == -1)
-  {
-    nowPlaying = this.id;
-  }
+  nowPlaying = this;
+  nextPlaying = null;
+
+  scrollToItemId('buttons', this.button.id);
 }
 
 Song.prototype.drawButton = function (parent)
@@ -110,11 +115,9 @@ Song.prototype.drawButton = function (parent)
 
   this.button = document.createElement('div');
   this.button.id = 'button' + this.id;
-
-  this.button.innerHTML = '<span>' + this.artist + '<BR><BR>' +
-    this.title + '</span>';
-
+  this.button.innerHTML = '<span>' + this.artist + '<BR><BR>' + this.title + '</span>';
   this.button.classList.add('playButton');
+
   var c = getRandomColor(this.title);
   this.button.style.backgroundColor = '#' + c;
   t = getComplimentaryColor(c);
@@ -127,26 +130,34 @@ Song.prototype.drawButton = function (parent)
   var song = this;
   this.button.addEventListener('click', function (e)
   {
-    if (this.isPlaying)
+    if (nowPlaying)
     {
-      // You can't stop it once you start!
-      return;
-    }
-
-    if (nowPlaying == -1)
-    {
-      song.play();
+      if (nowPlaying == song)
+      {
+        // You can't stop it once you start!
+      }
+      else if (!nextPlaying && nowPlaying)
+      {
+        // Choosing the next song
+        nextPlaying = song;
+        nextPlaying.button.classList.add('nextPlaying');
+      }
+      else
+      {
+        // next song already chosen
+      }
     }
     else
     {
-      if (nextPlaying < 0 && songList[nowPlaying].isFinishing)
-      {
-        nextPlaying = song.id;
-        song.play();
-      }
+      // choosing the next song
+      song.play();
     }
   }, false);
+}
 
+Song.prototype.updateTimeDisplay = function (timeRemaining)
+{
+  this.timeDisplay.innerHTML = getTimeDisplay(timeRemaining);
 }
 
 Song.prototype.loadAudio = function (parent)
@@ -167,11 +178,11 @@ Song.prototype.loadAudio = function (parent)
         {
           song.lastUpdateTime = this.currentTime;
           var timeRemaining = getRemianingTime(this);
-          song.timeDisplay.innerHTML = getTimeDisplay(timeRemaining);
+          song.updateTimeDisplay(timeRemaining);
           if (timeRemaining < canChangeTime)
           {
             song.isFinishing = true;
-            song.timeDisplay.classList.add('canChangeNow');
+            song.timeDisplay.classList.add('isFinishing');
           }
         }
 
@@ -182,29 +193,30 @@ Song.prototype.loadAudio = function (parent)
       {
         song.timeDisplay = document.createElement('div');
         song.timeDisplay.id = 'timeDisplay' + song.id;
-        song.timeDisplay.classList.add('timeLeft');
-        song.timeDisplay.innerHTML = getTimeDisplay(getRemianingTime(this));
+        song.timeDisplay.classList.add('timeDisplay');
+        song.totalTime = getRemianingTime(this);
+        song.updateTimeDisplay(song.totalTime);
+
         song.tile.appendChild(song.timeDisplay);
       }, false);
 
     song.audio.addEventListener('ended',
       function ()
       {
-        if (nextPlaying != null)
+        if (nextPlaying)
         {
-          // Next song already started
-          nowPlaying = nextPlaying;
-          nextPlaying = -1;
+          // Next song already chosen
+          nextPlaying.play();
         }
         else
         {
           // get random next unhidden song
-          var i = getRandomInt(0, (songList.length - 1));
-          while (songList[i].isHidden)
+          var r = getRandomInt(0, (songList.length - 1));
+          while (songList[r].isHidden || songList[r] == nowPlaying)
           {
-            i = ((i + 1) == songList.length) ? 0 : i + 1;
+            r = (r + 1) % songList.length;
           }
-          songList[i].play();
+          songList[r].play();
         }
 
         song.hide();
