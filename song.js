@@ -36,6 +36,7 @@ function Song(id, file, afterLoaded)
   this.isHidden = false; // Song hidden as was played already
   this.restCount = 0;
 
+  this.parent = {};
   this.audio = {};
   this.tile = {};
   this.button = {};
@@ -104,11 +105,15 @@ Song.prototype.play = function ()
   nowPlaying = this;
   nextPlaying = null;
 
-  scrollToItemId('buttons', this.timeDisplay.id);
+  // insert at top
+  this.parent.removeChild(this.tile);
+  this.parent.insertBefore(this.tile, this.parent.firstChild);
+  window.scrollTo(0, 0);
 }
 
 Song.prototype.drawButton = function (parent)
 {
+  this.parent = parent;
   this.tile = document.createElement('div');
   this.tile.id = 'tile' + this.id;
   this.tile.classList.add('tile');
@@ -141,6 +146,9 @@ Song.prototype.drawButton = function (parent)
         // Choosing the next song
         nextPlaying = song;
         nextPlaying.button.classList.add('nextPlaying');
+        song.parent.removeChild(song.tile);
+        song.parent.insertBefore(song.tile, song.parent.firstChild.nextSibling);
+        window.scrollTo(0, 0);
       }
       else
       {

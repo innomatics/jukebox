@@ -4,7 +4,8 @@ html
 }
 
 h1 { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-transform: uppercase; }
-input, .fileList, .startButton { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font-weight: 800; }
+input, .fileList, .startButton, p { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font-weight: 800; }
+p { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 16px; font-weight: 400; }
 
 .mainCanvas
 {
