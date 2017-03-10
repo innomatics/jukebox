@@ -1,117 +1,125 @@
-html
-{
-  background-color: black;
+html {
+    background-color: black;
+    font-size: 300%;
+    color: #ffffff;
+    @media(min-width: 60em) {
+        html {
+            font-size: 80%
+        }
+    }
+    font-family: 'Raleway', sans-serif;
 }
 
-h1 { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-transform: uppercase; }
-input, .fileList, .startButton, p { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 20px; font-weight: 800; }
-p { color: #ffffff; font-family: 'Raleway',sans-serif; font-size: 16px; font-weight: 400; }
-
-.mainCanvas
-{
-  min-height: 100%;
-  height: auto;
-  height: 100%;
-  margin: 0 0 0 0;
+h1 {
+    color: #ffffff;
+    font-size: 200%;
+    font-weight: 800;
+    line-height: 72px;
+    margin: 0 0 24px;
+    text-transform: uppercase;
 }
 
-.hiddenDiv
-{
-  display: none;
+input, .fileList, .startButton, p {
+  font-size: 16pt;
+}
+
+p {
+}
+
+.mainCanvas {
+    min-height: 100%;
+    height: auto;
+    height: 100%;
+    margin: 0 0 0 0;
+}
+
+.hiddenDiv {
+    display: none;
 }
 
 .startButton, input {
+    min-width: 50vw;
     background-color: silver;
     border: none;
-    padding: 15px 32px;
+    padding: 5px 32px;
     text-align: center;
-    text-decoration: none;
     display: inline-block;
 }
 
-.tile
-{
-	display: inline-block;
+.tile {
+    display: inline-block;
 }
 
-.playButton
-{
-	max-width: 30vw;
-	min-width: 30vw;
-	min-height: 30vw;
-	display: inline-table;
-	border-color: dark-gray;
-	border-width: 0.2vw;
-	border-style: solid;
-	border-radius: 15.2vw;
-	text-align: center;
-	margin: 5px 5px 5px 5px;
-	font-family: 'Helvetica Neue', sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 1;
-  padding: 10px 10px 10px 10px;
+.playButton {
+    max-width: 30vw;
+    min-width: 30vw;
+    min-height: 30vw;
+    max-height: 30vw;
+    font-size: 16pt;
+    display: inline-table;
+    border-color: dark-gray;
+    border-width: 0.2vw;
+    border-style: solid;
+    border-radius: 15.2vw;
+    text-align: center;
+    margin: 5px 5px 5px 5px;
+    line-height: 1;
+    padding: 10px 10px 10px 10px;
+    word-break: break-all;
 }
 
-.playButton span
-{
-  vertical-align:middle;
-  display: table-cell;
+.playButton span {
+    vertical-align: middle;
+    display: table-cell;
 }
 
-.isFinishing
-{
-  -webkit-animation: flash 10s linear;
-  animation: flash 1s linear;
-  -webkit-animation-iteration-count: 1000;
-  animation-iteration-count: 1000;
+.isFinishing {
+    -webkit-animation: flash 10s linear;
+    animation: flash 1s linear;
+    -webkit-animation-iteration-count: 1000;
+    animation-iteration-count: 1000;
 }
 
-.timeDisplay
-{
-  position: relative;
-  left: 14.5vw;
-  top: -5vw;
-  color: inherit;
-	font-family: 'Helvetica Neue', sans-serif;
-  font-size: 12px;
+.timeDisplay {
+    position: relative;
+    left: 14.5vw;
+    top: -5vw;
+    color: inherit;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
 }
 
-.nowPlaying
-{
-	border-color: white;
-	border-width: 1vw;
-	border-radius: 17vw;
-  -webkit-animation: spin-360 10s linear;
-  animation: spin-360 10s linear;
-  -webkit-animation-iteration-count: 1000;
-  animation-iteration-count: 1000;
+.nowPlaying {
+    border-color: white;
+    border-width: 1vw;
+    border-radius: 17vw;
+    -webkit-animation: spin-360 10s linear;
+    animation: spin-360 10s linear;
+    -webkit-animation-iteration-count: 1000;
+    animation-iteration-count: 1000;
 }
 
-.nextPlaying
-{
-	border-color: silver;
-	border-width: 1vw;
-	border-radius: 17vw;
-  -webkit-animation: flash 1s linear;
-  animation: flash 1s linear;
-  -webkit-animation-iteration-count: 2;
-  animation-iteration-count: 2;
+.nextPlaying {
+    border-color: silver;
+    border-width: 1vw;
+    border-radius: 17vw;
+    -webkit-animation: flash 1s linear;
+    animation: flash 1s linear;
+    -webkit-animation-iteration-count: 2;
+    animation-iteration-count: 2;
 }
 
-
-@-webkit-keyframes spin-360
-{
-	100% {
-    transform: rotate(360deg);
-	}
+@-webkit-keyframes spin-360 {
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @-webkit-keyframes flash {
-   0%, 50%, 100% {
-      opacity: 1;
-   }
-   25%, 75% {
-      opacity: 0;
-   }
+    0%, 50%, 100% {
+        opacity: 1;
+    }
+    25%, 75% {
+        opacity: 0;
+    }
 }
