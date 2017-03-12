@@ -37,15 +37,15 @@ function Song(id, file, afterLoaded)
   this.restCount = 0;
 
   this.parent = {};
-  this.audio = {};
+  this.audio = null;
   this.tile = {};
   this.button = {};
-  this.timeDisplay = {};
+  this.timeDisplay = null;
   this.lastUpdateTime = 0;
   this.totalTime = 0;
 
   this.title = file.name;
-  this.artist = 'unknown';
+  this.artist = '';
   this.cover = null;
 
   var song = this;
@@ -97,18 +97,25 @@ Song.prototype.unHide = function ()
 
 Song.prototype.play = function ()
 {
-  this.audio.play();
-  this.button.classList.remove('nextPlaying');
-  this.button.classList.add('nowPlaying');
-  this.isFinishing = false;
-  this.isPlaying = true;
-  nowPlaying = this;
-  nextPlaying = null;
+  if (this.audio)
+  {
+    this.audio.play();
+    this.button.classList.remove('nextPlaying');
+    this.button.classList.add('nowPlaying');
+    this.isFinishing = false;
+    this.isPlaying = true;
+    nowPlaying = this;
+    nextPlaying = null;
 
-  // insert at top
-  this.parent.removeChild(this.tile);
-  this.parent.insertBefore(this.tile, this.parent.firstChild);
-  window.scrollTo(0, 0);
+    // insert at top
+    this.parent.removeChild(this.tile);
+    this.parent.insertBefore(this.tile, this.parent.firstChild);
+    window.scrollTo(0, 0);
+  }
+  else
+  {
+    this.loadAudio();
+  }
 }
 
 Song.prototype.drawButton = function (parent)
@@ -123,6 +130,10 @@ Song.prototype.drawButton = function (parent)
   this.button.innerHTML = '<span>' + this.artist + '<BR><BR>' + this.title + '</span>';
   this.button.classList.add('playButton');
 
+  this.timeDisplay = document.createElement('div');
+  this.timeDisplay.id = 'timeDisplay' + this.id;
+  this.timeDisplay.classList.add('timeDisplay');
+
   var c = getRandomColor(this.title);
   this.button.style.backgroundColor = '#' + c;
   t = getComplimentaryColor(c);
@@ -130,6 +141,7 @@ Song.prototype.drawButton = function (parent)
   this.tile.style.color = '#' + t.toString(16);
 
   this.tile.appendChild(this.button);
+  this.tile.appendChild(this.timeDisplay);
   parent.appendChild(this.tile);
 
   var song = this;
@@ -168,6 +180,13 @@ Song.prototype.updateTimeDisplay = function (timeRemaining)
   this.timeDisplay.innerHTML = getTimeDisplay(timeRemaining);
 }
 
+Song.prototype.unLoadAudio = function (parent)
+{
+  document.removeChild(this.audio.id);
+  this.audio.src = null;
+  this.audio = null;
+}
+
 Song.prototype.loadAudio = function (parent)
 {
   var reader = new FileReader(this.file);
@@ -187,7 +206,7 @@ Song.prototype.loadAudio = function (parent)
           song.lastUpdateTime = this.currentTime;
           var timeRemaining = getRemianingTime(this);
           song.updateTimeDisplay(timeRemaining);
-          if (timeRemaining < canChangeTime)
+          if (timeRemaining < canChangeTime && !song.isFinishing)
           {
             song.isFinishing = true;
             song.timeDisplay.classList.add('isFinishing');
@@ -199,13 +218,9 @@ Song.prototype.loadAudio = function (parent)
     song.audio.addEventListener('loadedmetadata',
       function ()
       {
-        song.timeDisplay = document.createElement('div');
-        song.timeDisplay.id = 'timeDisplay' + song.id;
-        song.timeDisplay.classList.add('timeDisplay');
         song.totalTime = getRemianingTime(this);
         song.updateTimeDisplay(song.totalTime);
-
-        song.tile.appendChild(song.timeDisplay);
+        song.play();
       }, false);
 
     song.audio.addEventListener('ended',
@@ -229,6 +244,7 @@ Song.prototype.loadAudio = function (parent)
 
         song.hide();
         song.isPlaying = false;
+        song.unLoadAudio();
 
         // unhide any songs that have rested long enough
         for (var i = 0; i < songList.length; i++)

@@ -1,18 +1,20 @@
 html {
     background-color: black;
-    font-size: 300%;
+    font-size: 100%;
     color: #ffffff;
+    /*
     @media(min-width: 60em) {
         html {
             font-size: 80%
         }
     }
+    */
     font-family: 'Raleway', sans-serif;
 }
 
 h1 {
     color: #ffffff;
-    font-size: 200%;
+    font-size: 40pt;
     font-weight: 800;
     line-height: 72px;
     margin: 0 0 24px;
@@ -20,17 +22,16 @@ h1 {
 }
 
 input, .fileList, .startButton, p {
-  font-size: 16pt;
+  font-size: 15pt;
 }
 
 p {
 }
 
 .mainCanvas {
-    min-height: 100%;
-    height: auto;
-    height: 100%;
     margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    height: 100%;
 }
 
 .hiddenDiv {
@@ -38,7 +39,7 @@ p {
 }
 
 .startButton, input {
-    min-width: 50vw;
+    width: 500px;
     background-color: silver;
     border: none;
     padding: 5px 32px;
@@ -48,24 +49,24 @@ p {
 
 .tile {
     display: inline-block;
+    height: 284px;
+    width: 284px;
 }
 
 .playButton {
-    max-width: 30vw;
-    min-width: 30vw;
-    min-height: 30vw;
-    max-height: 30vw;
-    font-size: 16pt;
+    width: 95%;
+    height: 95%;
+    font-size: 15pt;
+    font-weight: bold;
     display: inline-table;
     border-color: dark-gray;
-    border-width: 0.2vw;
+    border-width: 2px;
     border-style: solid;
-    border-radius: 15.2vw;
+    border-radius: 50%;
     text-align: center;
     margin: 5px 5px 5px 5px;
-    line-height: 1;
-    padding: 10px 10px 10px 10px;
-    word-break: break-all;
+    padding: 2px 2px 2px 2px;
+    line-height: 1.3;
 }
 
 .playButton span {
@@ -82,17 +83,20 @@ p {
 
 .timeDisplay {
     position: relative;
-    left: 14.5vw;
-    top: -5vw;
+    left: 130px;
+    top: -40px;
     color: inherit;
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 12px;
+    font-size: 12pt;
+}
+
+.nowPlaying, .nextPlaying {
+    border-color: white;
+    border-width: 5px;
+    border-radius: 145px;
 }
 
 .nowPlaying {
-    border-color: white;
-    border-width: 1vw;
-    border-radius: 17vw;
     -webkit-animation: spin-360 10s linear;
     animation: spin-360 10s linear;
     -webkit-animation-iteration-count: 1000;
@@ -100,9 +104,6 @@ p {
 }
 
 .nextPlaying {
-    border-color: silver;
-    border-width: 1vw;
-    border-radius: 17vw;
     -webkit-animation: flash 1s linear;
     animation: flash 1s linear;
     -webkit-animation-iteration-count: 2;

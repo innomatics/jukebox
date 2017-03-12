@@ -5,6 +5,10 @@ var songCount = 0;
 
 var nowPlaying = null;
 var nextPlaying = null;
+
+var nowPlayingAudio = null;
+var nextPlayingAudio = null;
+
 var canChangeTime = 20; // Seconds before end when can start next tune
 
 var maxRests = 1; // Number of plays song stays hidden after being played

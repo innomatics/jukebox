@@ -68,7 +68,7 @@ function startPlayer()
     {
       var song = songList[i];
       song.drawButton(buttons);
-      song.loadAudio();
+      //song.loadAudio();
     }
   }
 }
