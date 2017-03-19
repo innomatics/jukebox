@@ -1,3 +1,21 @@
+(function ()
+{
+  var old = console.log;
+  var logger = document.getElementById('logger');
+  console.log = function (message)
+  {
+    if (typeof message == 'object')
+    {
+      logger.innerHTML += (JSON && JSON.stringify ? JSON.stringify(message) : message) + '<br />';
+    }
+    else
+    {
+      logger.innerHTML += message + '<br />';
+    }
+    old(message); // log normally as well
+  }
+})();
+
 //example easing functions
 function linearEase(currentIteration, startValue, changeInValue, totalIterations)
 {
@@ -60,14 +78,20 @@ function startPlayer()
   else
   {
     maxRests = songList.length / 2;
-    var buttons = document.getElementById('buttons');
     var manage = document.getElementById('manage');
+    songListDiv = document.getElementById('songListDiv');
+    nowPlayingDiv = document.getElementById('nowPlayingDiv');
+    nextPlayingDiv = document.getElementById('nextPlayingDiv');
+    deck1 = new Audio(); //document.createElement('AUDIO');
+    deck2 = new Audio(); //document.createElement('AUDIO');
+    deck1.isLoaded = false;
+    deck2.isLoaded = false;
     manage.classList.add('hiddenDiv');
 
     for (var i = 0; i < songList.length; i++)
     {
       var song = songList[i];
-      song.drawButton(buttons);
+      song.drawButton(songListDiv);
       //song.loadAudio();
     }
   }

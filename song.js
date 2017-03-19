@@ -25,6 +25,71 @@ function getRemianingTime(audio)
   return t;
 }
 
+function audioTimeUpdate(e)
+{
+  var source = e.target;
+  var song = source.song;
+  if ((source.currentTime - song.lastUpdateTime) > 1)
+  {
+    song.lastUpdateTime = source.currentTime;
+    var timeRemaining = getRemianingTime(source);
+    song.updateTimeDisplay(timeRemaining);
+    if (timeRemaining < canChangeTime && !song.isFinishing)
+    {
+      song.isFinishing = true;
+      song.timeDisplay.classList.add('isFinishing');
+
+      if (!nextPlaying)
+      {
+        // Choose the next song
+        // get random next unhidden song
+        var r = getRandomInt(0, (songList.length - 1));
+        while (songList[r].isHidden || songList[r] == nowPlaying)
+        {
+          r = (r + 1) % songList.length;
+        }
+        nextPlaying = songList[r];
+      }
+      // Start playing the next song
+      nextPlaying.play();
+    }
+  }
+
+}
+
+function audioCanPlay(e)
+{
+  var source = e.target;
+  var song = source.song;
+  song.totalTime = getRemianingTime(source);
+  song.updateTimeDisplay(song.totalTime);
+  song.play();
+}
+
+function audioEnded(e)
+{
+  var source = e.target;
+  var song = source.song;
+
+  song.hide();
+  song.isPlaying = false;
+  song.unLoadAudio();
+
+  // unhide any songs that have rested long enough
+  for (var i = 0; i < songList.length; i++)
+  {
+    var otherSong = songList[i];
+    if (otherSong.isHidden)
+    {
+      otherSong.restCount++;
+      if (otherSong.restCount > maxRests)
+      {
+        otherSong.unHide();
+      }
+    }
+  }
+}
+
 function Song(id, file, afterLoaded)
 {
   this.id = id;
@@ -78,10 +143,15 @@ function Song(id, file, afterLoaded)
 Song.prototype.hide = function ()
 {
   this.isHidden = true;
+  this.isFinishing = false;
   this.tile.classList.remove('tile');
   this.button.classList.remove('nowPlaying');
   this.timeDisplay.classList.remove('isFinishing');
   this.tile.classList.add('hiddenDiv');
+
+  this.parent.removeChild(this.tile);
+  songListDiv.insertBefore(this.tile, songListDiv.lastChild.nextSibling);
+  this.parent = songListDiv;
 
   this.lastUpdateTime = 0;
 };
@@ -109,7 +179,8 @@ Song.prototype.play = function ()
 
     // insert at top
     this.parent.removeChild(this.tile);
-    this.parent.insertBefore(this.tile, this.parent.firstChild);
+    nowPlayingDiv.insertBefore(this.tile, nowPlayingDiv.lastChild.nextSibling);
+    this.parent = nowPlayingDiv;
     window.scrollTo(0, 0);
   }
   else
@@ -145,7 +216,7 @@ Song.prototype.drawButton = function (parent)
   parent.appendChild(this.tile);
 
   var song = this;
-  this.button.addEventListener('click', function (e)
+  this.button.addEventListener('click', function songClicked(e)
   {
     if (nowPlaying)
     {
@@ -157,9 +228,10 @@ Song.prototype.drawButton = function (parent)
       {
         // Choosing the next song
         nextPlaying = song;
-        nextPlaying.button.classList.add('nextPlaying');
+        song.button.classList.add('nextPlaying');
         song.parent.removeChild(song.tile);
-        song.parent.insertBefore(song.tile, song.parent.firstChild.nextSibling);
+        nextPlayingDiv.insertBefore(song.tile, nextPlayingDiv.lastChild.nextSibling);
+        song.parent = nextPlayingDiv;
         window.scrollTo(0, 0);
       }
       else
@@ -180,87 +252,26 @@ Song.prototype.updateTimeDisplay = function (timeRemaining)
   this.timeDisplay.innerHTML = getTimeDisplay(timeRemaining);
 }
 
-Song.prototype.unLoadAudio = function (parent)
+Song.prototype.unLoadAudio = function ()
 {
-  document.removeChild(this.audio.id);
-  this.audio.src = null;
-  this.audio = null;
+  this.audio.isLoaded = false;
+  this.audio.removeEventListener('timeupdate', audioTimeUpdate);
+  this.audio.removeEventListener('canplay', audioCanPlay);
+  this.audio.removeEventListener('ended', audioEnded);
 }
 
-Song.prototype.loadAudio = function (parent)
+Song.prototype.loadAudio = function ()
 {
-  var reader = new FileReader(this.file);
   var song = this;
-  reader.addEventListener('load', function ()
-  {
-    song.audio = document.createElement('audio');
-    song.audio.id = 'audio' + song.id;
-    song.audio.src = this.result;
-    song.audio.type = 'audio/mpeg';
 
-    song.audio.addEventListener('timeupdate',
-      function ()
-      {
-        if ((this.currentTime - song.lastUpdateTime) > 1)
-        {
-          song.lastUpdateTime = this.currentTime;
-          var timeRemaining = getRemianingTime(this);
-          song.updateTimeDisplay(timeRemaining);
-          if (timeRemaining < canChangeTime && !song.isFinishing)
-          {
-            song.isFinishing = true;
-            song.timeDisplay.classList.add('isFinishing');
-          }
-        }
+  song.audio = deck1.isLoaded ? deck2 : deck1;
+  song.audio.isLoaded = true;
+  song.audio.type = 'audio/mpeg';
+  song.audio.song = this;
 
-      }, false);
+  song.audio.src = music_http_folder + this.filename;
 
-    song.audio.addEventListener('loadedmetadata',
-      function ()
-      {
-        song.totalTime = getRemianingTime(this);
-        song.updateTimeDisplay(song.totalTime);
-        song.play();
-      }, false);
-
-    song.audio.addEventListener('ended',
-      function ()
-      {
-        if (nextPlaying)
-        {
-          // Next song already chosen
-          nextPlaying.play();
-        }
-        else
-        {
-          // get random next unhidden song
-          var r = getRandomInt(0, (songList.length - 1));
-          while (songList[r].isHidden || songList[r] == nowPlaying)
-          {
-            r = (r + 1) % songList.length;
-          }
-          songList[r].play();
-        }
-
-        song.hide();
-        song.isPlaying = false;
-        song.unLoadAudio();
-
-        // unhide any songs that have rested long enough
-        for (var i = 0; i < songList.length; i++)
-        {
-          var otherSong = songList[i];
-          if (otherSong.isHidden)
-          {
-            otherSong.restCount++;
-            if (otherSong.restCount > maxRests)
-            {
-              otherSong.unHide();
-            }
-          }
-        }
-
-      }, false);
-  }, false);
-  reader.readAsDataURL(this.file);
+  song.audio.addEventListener('timeupdate', audioTimeUpdate, false);
+  song.audio.addEventListener('canplay', audioCanPlay, false);
+  song.audio.addEventListener('ended', audioEnded, false);
 }

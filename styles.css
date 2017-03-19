@@ -28,6 +28,13 @@ input, .fileList, .startButton, p {
 p {
 }
 
+.nowPlayingDiv, .nextPlayingDiv {
+  display: inline-block;
+  width: 284px;
+  vertical-align: top;
+  margin-bottom: 50pt;
+}
+
 .mainCanvas {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -51,6 +58,11 @@ p {
     display: inline-block;
     height: 284px;
     width: 284px;
+}
+
+.log {
+  color: white;
+  font-size: 10pt;
 }
 
 .playButton {
