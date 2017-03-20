@@ -14,7 +14,7 @@ var songListDiv = null;
 var deck1 = null;
 var deck2 = null;
 
-var canChangeTime = 3; // Seconds before end when can start next tune
+var canChangeTime = 10; // Seconds before end when can start next tune
 
 var maxRests = 1; // Number of plays song stays hidden after being played
 
