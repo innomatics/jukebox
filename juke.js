@@ -1,4 +1,4 @@
-(function ()
+function setupConsoleLog()
 {
   var old = console.log;
   var logger = document.getElementById('logger');
@@ -12,9 +12,8 @@
     {
       logger.innerHTML += message + '<br />';
     }
-    old(message); // log normally as well
   }
-})();
+}
 
 //example easing functions
 function linearEase(currentIteration, startValue, changeInValue, totalIterations)
@@ -32,20 +31,58 @@ function updateFileList()
   var fileList = document.getElementById('fileList');
 
   var listHtml = '';
-  for (var i = 0; i < songList.length; i++)
+  for (var i = 0; i < songFileList.length; i++)
   {
-    var song = songList[i];
+    var song = songFileList[i];
     listHtml = listHtml + song.title + '<BR>';
   }
   fileList.innerHTML = listHtml;
+
+  // Save to local storage
+  localStorage.setItem('songFileList', JSON.stringify(songFileList));
+}
+
+function addSongFile(songFile)
+{
+  songFileList.push(songFile)
+  console.log('Added new song: ' + songFile.filename);
+  updateFileList();
 }
 
 function addFile(file, i)
 {
   if (file)
   {
-    var song = new Song(i, file, updateFileList);
-    songList.push(song);
+    var songFile = {};
+    songFile.filename = file.name;
+    songFile.artist = '';
+    songFile.title = file.name.replace(/_/g, ' ');
+
+    jsmediatags.read(file,
+    {
+
+      onSuccess: function (tag)
+      {
+        if (tag.tags.hasOwnProperty('artist'))
+        {
+          songFile.artist = tag.tags.artist;
+        }
+        if (tag.tags.hasOwnProperty('title'))
+        {
+          songFile.title = tag.tags.title;
+        }
+        if (tag.tags.hasOwnProperty('picture'))
+        {
+          songFile.cover = tag.tags.picture;
+        }
+        addSongFile(songFile);
+      },
+      onError: function (error)
+      {
+        console.log(error);
+        addSongFile(songFile);
+      }
+    });
   }
 }
 
@@ -57,6 +94,7 @@ function addFiles(e)
   {
     addFile(files[i], i);
   }
+
 }
 
 function hideDiv(div)
@@ -71,7 +109,7 @@ function unHideDiv(div)
 
 function startPlayer()
 {
-  if (songList.length == 0)
+  if (songFileList.length == 0)
   {
     alert('Add some song files first!');
   }
@@ -88,11 +126,11 @@ function startPlayer()
     deck2.isLoaded = false;
     manage.classList.add('hiddenDiv');
 
-    for (var i = 0; i < songList.length; i++)
+    for (var i = 0; i < songFileList.length; i++)
     {
-      var song = songList[i];
+      var song = new Song(i, songFileList[i]);
+      songList.push(song);
       song.drawButton(songListDiv);
-      //song.loadAudio();
     }
   }
 }
@@ -105,7 +143,10 @@ function AddListeners()
 
 function appStart()
 {
+  songFileList = JSON.parse(localStorage.getItem('songFileList')) || [];
+  updateFileList();
   AddListeners();
+  setupConsoleLog();
 }
 
 (function ()

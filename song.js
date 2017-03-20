@@ -90,11 +90,10 @@ function audioEnded(e)
   }
 }
 
-function Song(id, file, afterLoaded)
+function Song(id, songFile)
 {
   this.id = id;
-  this.file = file;
-  this.filename = file.name;
+  this.filename = songFile.filename;
 
   this.isPlaying = false; // Song currently playing
   this.isFinishing = false; // Song nearly finished
@@ -109,35 +108,8 @@ function Song(id, file, afterLoaded)
   this.lastUpdateTime = 0;
   this.totalTime = 0;
 
-  this.title = file.name;
-  this.artist = '';
-  this.cover = null;
-
-  var song = this;
-
-  jsmediatags.read(this.file,
-  {
-    onSuccess: function (tag)
-    {
-      if (tag.tags.hasOwnProperty('artist'))
-      {
-        song.artist = tag.tags.artist;
-      }
-      if (tag.tags.hasOwnProperty('title'))
-      {
-        song.title = tag.tags.title;
-      }
-      if (tag.tags.hasOwnProperty('picture'))
-      {
-        song.cover = tag.tags.picture;
-      }
-      afterLoaded();
-    },
-    onError: function (error)
-    {
-      console.log(error);
-    }
-  });
+  this.title = songFile.title;
+  this.artist = songFile.artist;
 }
 
 Song.prototype.hide = function ()
@@ -154,7 +126,7 @@ Song.prototype.hide = function ()
   this.parent = songListDiv;
 
   this.lastUpdateTime = 0;
-};
+}
 
 Song.prototype.unHide = function ()
 {
@@ -169,19 +141,22 @@ Song.prototype.play = function ()
 {
   if (this.audio)
   {
-    this.audio.play();
-    this.button.classList.remove('nextPlaying');
-    this.button.classList.add('nowPlaying');
-    this.isFinishing = false;
-    this.isPlaying = true;
-    nowPlaying = this;
-    nextPlaying = null;
+    if (this.audio.isLoaded)
+    {
+      this.audio.play();
+      this.button.classList.remove('nextPlaying');
+      this.button.classList.add('nowPlaying');
+      this.isFinishing = false;
+      this.isPlaying = true;
+      nowPlaying = this;
+      nextPlaying = null;
 
-    // insert at top
-    this.parent.removeChild(this.tile);
-    nowPlayingDiv.insertBefore(this.tile, nowPlayingDiv.lastChild.nextSibling);
-    this.parent = nowPlayingDiv;
-    window.scrollTo(0, 0);
+      // insert at top
+      this.parent.removeChild(this.tile);
+      nowPlayingDiv.insertBefore(this.tile, nowPlayingDiv.lastChild.nextSibling);
+      this.parent = nowPlayingDiv;
+      window.scrollTo(0, 0);
+    }
   }
   else
   {
@@ -198,7 +173,15 @@ Song.prototype.drawButton = function (parent)
 
   this.button = document.createElement('div');
   this.button.id = 'button' + this.id;
-  this.button.innerHTML = '<span>' + this.artist + '<BR><BR>' + this.title + '</span>';
+
+  var buttonText = '<span>';
+  if (this.artist)
+  {
+    buttonText += this.artist + '<BR><BR>';
+  }
+  buttonText += this.title + '</span>';
+  this.button.innerHTML = buttonText;
+
   this.button.classList.add('playButton');
 
   this.timeDisplay = document.createElement('div');
@@ -236,12 +219,12 @@ Song.prototype.drawButton = function (parent)
       }
       else
       {
-        // next song already chosen
+        // next song already chosen do nothing
       }
     }
     else
     {
-      // choosing the next song
+      // choosing the first song
       song.play();
     }
   }, false);
