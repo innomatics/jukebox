@@ -115,7 +115,7 @@ function startPlayer()
   }
   else
   {
-    maxRests = songList.length / 2;
+    maxRests = songFileList.length / 2;
     var manage = document.getElementById('manage');
     songListDiv = document.getElementById('songListDiv');
     nowPlayingDiv = document.getElementById('nowPlayingDiv');
