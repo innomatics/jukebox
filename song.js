@@ -241,6 +241,7 @@ Song.prototype.unLoadAudio = function ()
   this.audio.removeEventListener('timeupdate', audioTimeUpdate);
   this.audio.removeEventListener('canplay', audioCanPlay);
   this.audio.removeEventListener('ended', audioEnded);
+  this.audio = null;
 }
 
 Song.prototype.loadAudio = function ()
