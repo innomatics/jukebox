@@ -1,6 +1,8 @@
 var two32 = 4294967295; // 2^32
 var READY_TO_PLAY = 4;
 
+var logger;
+
 var songList = [];
 var songFileList = [];
 var songCount = 0;

@@ -1,7 +1,7 @@
 function setupConsoleLog()
 {
   var old = console.log;
-  var logger = document.getElementById('logger');
+  logger = document.getElementById('logger');
   console.log = function (message)
   {
     if (typeof message == 'object')
@@ -125,6 +125,10 @@ function startPlayer()
     deck1.isLoaded = false;
     deck2.isLoaded = false;
     manage.classList.add('hiddenDiv');
+
+    logger.innerHTML = '';
+    console.log('HISTORY');
+    console.log('=======');
 
     for (var i = 0; i < songFileList.length; i++)
     {

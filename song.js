@@ -99,6 +99,7 @@ function Song(id, songFile)
   this.isFinishing = false; // Song nearly finished
   this.isHidden = false; // Song hidden as was played already
   this.restCount = 0;
+  this.playCount = 0;
 
   this.parent = {};
   this.audio = null;
@@ -151,6 +152,9 @@ Song.prototype.play = function ()
       nowPlaying = this;
       nextPlaying = null;
 
+      this.playCount++;
+
+      console.log(this.title + ' (' + this.playCount + ')');
       // insert at top
       this.parent.removeChild(this.tile);
       nowPlayingDiv.insertBefore(this.tile, nowPlayingDiv.lastChild.nextSibling);
