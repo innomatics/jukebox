@@ -71,7 +71,7 @@ function addFile(file, i)
         }
         if (tag.tags.hasOwnProperty('picture'))
         {
-          songFile.cover = tag.tags.picture;
+          //songFile.cover = tag.tags.picture;
         }
         addSongFile(songFile);
       },
