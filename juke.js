@@ -97,6 +97,24 @@ function addFiles(e)
 
 }
 
+function addJSON(e)
+{
+  var file = e.target.files[0];
+  if (file)
+  {
+    reader = new FileReader();
+
+    reader.onload = function (f)
+    {
+      localStorage.setItem('songFileList', f.target.result);
+      songFileList = JSON.parse(localStorage.getItem('songFileList')) || [];
+      updateFileList();
+    }
+
+    reader.readAsText(file);
+  }
+}
+
 function hideDiv(div)
 {
   div.classList.add('hiddenDiv');
@@ -115,7 +133,7 @@ function startPlayer()
   }
   else
   {
-    maxRests = songFileList.length / 2;
+    maxRests = Math.min(10, songFileList.length / 2);
     var manage = document.getElementById('manage');
     songListDiv = document.getElementById('songListDiv');
     nowPlayingDiv = document.getElementById('nowPlayingDiv');
@@ -130,6 +148,9 @@ function startPlayer()
     console.log('HISTORY');
     console.log('=======');
 
+    var downloadJSONLink = document.getElementById('downloadJSON');
+    downloadJSONLink.removeAttribute('href');
+
     for (var i = 0; i < songFileList.length; i++)
     {
       var song = new Song(i, songFileList[i]);
@@ -139,10 +160,20 @@ function startPlayer()
   }
 }
 
+function prepareJSONDownload()
+{
+  var downloadJSONLink = document.getElementById('downloadJSON');
+
+  downloadJSONLink.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+    encodeURIComponent(localStorage.getItem('songFileList')));
+}
+
 function AddListeners()
 {
   document.getElementById('addFiles').addEventListener('change', addFiles, false);
   document.getElementById('startPlayer').addEventListener('click', startPlayer, false);
+  document.getElementById('addJSON').addEventListener('change', addJSON, false);
+  prepareJSONDownload();
 }
 
 function appStart()
