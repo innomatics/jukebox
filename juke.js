@@ -38,8 +38,6 @@ function updateFileList()
   }
   fileList.innerHTML = listHtml;
 
-  // Save to local storage
-  localStorage.setItem('songFileList', JSON.stringify(songFileList));
 }
 
 function addSongFile(songFile)
@@ -147,6 +145,9 @@ function startPlayer()
     logger.innerHTML = '';
     console.log('HISTORY');
     console.log('=======');
+
+    // Save to local storage
+    localStorage.setItem('songFileList', JSON.stringify(songFileList));
 
     var downloadJSONLink = document.getElementById('downloadJSON');
     downloadJSONLink.removeAttribute('href');
